@@ -35,7 +35,8 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
-// Elements
+// Element Selectors.
+/////////////////////
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
 const labelBalance = document.querySelector('.balance__value');
@@ -60,6 +61,7 @@ const inputTransferAmount = document.querySelector('.form__input--amount');
 const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
+////////////////////////////////////////////////
 
 ///CREATING THE USERNAMES FOR EACH INDIVIDUAL USER.
 const createUsernames = function (accs) {
@@ -155,7 +157,7 @@ if(currentAccount?.pin === Number(inputLoginPin.value)){
   inputLoginPin.blur();
 
 
-  ///updating UI 
+  ///-------------updating UI------------------
       // display movements.
   displayMovements(currentAccount.movements);
   
@@ -164,12 +166,8 @@ if(currentAccount?.pin === Number(inputLoginPin.value)){
   
     //display summary.
   calcDisplaySummary(currentAccount.movements)
-
-  
-
-}
-console.log('interest rate',currentAccount.interestRate)
-});
+  //------------UI updated----------------
+}});
 
 ////-----transfering money from one account to another-----///
 
@@ -184,6 +182,13 @@ btnTransfer.addEventListener('click', function(e){
   // setting conditions for money transfers. must have enough money to send, and the amount to send must be positive.
   //recipient username cannot match your own username.
   //recipient must exist.
+  //-------------------------------------
+  //clearing input fields with blur.
+  inputTransferAmount.value = inputTransferTo.value = '';
+  inputTransferAmount.blur();
+  inputTransferTo.blur();
+
+
   if (amount > 0 && receiverAcc && currentAccount.balance >= amount && receiverAcc?.username !== currentAccount.username){
     console.log('transfer valid')
     //add to each users movement array
@@ -191,17 +196,34 @@ btnTransfer.addEventListener('click', function(e){
     //for receiver, add the positive amount.
     currentAccount.movements.push(amount * -1);
     receiverAcc.movements.push(amount);
-     ///updating UI 
+     ///-----updating UI again------
       // display movements.
-  displayMovements(currentAccount.movements);
-  // display balance.
-calcDisplayBalance(currentAccount.movements);
-  //display summary.
-calcDisplaySummary(currentAccount.movements)
+    displayMovements(currentAccount.movements);
+    // display balance.
+    calcDisplayBalance(currentAccount.movements);
+    //display summary.
+    calcDisplaySummary(currentAccount.movements);
+    //////
   } else {
     console.log('transfer invalid');
     alert('Please enter a valid username and amount!')
   }
+});
 
-  
+/////----------close account feature-----------/////
+btnClose.addEventListener('click',function(e) {
+  e.preventDefault(); //prevent page reload on form entry
+  //if username inputted matches the current user's username
+  //and the pin matches the current user's pin
+  if (inputCloseUsername.value === currentAccount.username && Number(inputClosePin.value) === (currentAccount.pin)){
+    //searching for the index of the username trying to be deleted. looks for the first element in the array that matches the condition.
+    const index = accounts.findIndex(acc => acc.username === currentAccount.username);
+    //now we splice to remove the account at the found index.
+    accounts.splice(index, 1);
+    //now the user should be logged out if the account deletion was successful.
+    containerApp.style.opacity = 0;
+  }
+  else {
+    alert('Incorrect username or pin!')
+  }
 })
