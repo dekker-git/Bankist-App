@@ -95,8 +95,9 @@ containerMovements.innerHTML= '';
 //FUNCTION FOR PRINTING THE TOTAL BALANCE AFTER ACCOUNTING FOR ALL THE DEPOSITS AND WITHDRAWALS.
 const calcDisplayBalance = function(movements){
   const balance = movements.reduce((acc,mov)=> acc + mov,0);
-
+  currentAccount.balance = Number(balance);
   labelBalance.textContent = `${balance}€`;
+
 };
 
 //FUNCION FOR SHOWING THE TOTAL DEPOSITS,WITHDRAWALS AND INTEREST.. 'DisplaySummary'
@@ -139,8 +140,7 @@ currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value)
 
 console.log(currentAccount);
 
-//optional chaining.. current pin will only be read if the account exists.
-
+//optional chaining.. current pin will only be read if the account exists --> currentAccount?.pin
 if(currentAccount?.pin === Number(inputLoginPin.value)){
 
   // display UI and welcome message
@@ -155,14 +155,53 @@ if(currentAccount?.pin === Number(inputLoginPin.value)){
   inputLoginPin.blur();
 
 
-  // display movements.
+  ///updating UI 
+      // display movements.
   displayMovements(currentAccount.movements);
   
-  // display balance.
+    // display balance.
   calcDisplayBalance(currentAccount.movements);
   
-  //display summary.
+    //display summary.
   calcDisplaySummary(currentAccount.movements)
-}
-})
 
+  
+
+}
+console.log('interest rate',currentAccount.interestRate)
+});
+
+////-----transfering money from one account to another-----///
+
+btnTransfer.addEventListener('click', function(e){
+  e.preventDefault(); //stops page reload.
+  //pulling amount value from input field.
+  const amount = Number(inputTransferAmount.value);
+  //pulling user to send money to from input field
+  const receiverAcc = accounts.find(acc => acc.username === inputTransferTo.value);
+  //
+  console.log(amount,receiverAcc);
+  // setting conditions for money transfers. must have enough money to send, and the amount to send must be positive.
+  //recipient username cannot match your own username.
+  //recipient must exist.
+  if (amount > 0 && receiverAcc && currentAccount.balance >= amount && receiverAcc?.username !== currentAccount.username){
+    console.log('transfer valid')
+    //add to each users movement array
+    //for sender, add the negative amount
+    //for receiver, add the positive amount.
+    currentAccount.movements.push(amount * -1);
+    receiverAcc.movements.push(amount);
+     ///updating UI 
+      // display movements.
+  displayMovements(currentAccount.movements);
+  // display balance.
+calcDisplayBalance(currentAccount.movements);
+  //display summary.
+calcDisplaySummary(currentAccount.movements)
+  } else {
+    console.log('transfer invalid');
+    alert('Please enter a valid username and amount!')
+  }
+
+  
+})
