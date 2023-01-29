@@ -89,20 +89,32 @@ const calcDisplayBalance = function(movements){
 };
 calcDisplayBalance(account1.movements);
 
-//FUNCION FOR SHOWING THE TOTAL DEPOSITS
+//FUNCION FOR SHOWING THE TOTAL DEPOSITS,WITHDRAWALS AND INTEREST.. 'DisplaySummary'
+//summing all deposits
 const calcDisplaySummary = function(movements) {
   const incomes = movements
   .filter(mov => mov > 0)
   .reduce((acc,mov) => acc+mov,0);
   labelSumIn.textContent = `${incomes}€`;
 
+  //summing all withdrawals
   const withdrawals = movements
   .filter(mov => mov < 0)
   .reduce((acc,mov)=>acc+mov,0);
   labelSumOut.textContent = `${Math.abs(withdrawals)}€`
+
+  //calculating interest at 1.2%
+  //interest only applies on deposits > 1 euro
+  const interest = movements
+  .filter(mov => mov > 0)
+  .map(deposit => deposit*0.012)
+  .filter((int, i, array) => {
+    return int >= 1;})
+  .reduce((acc,interest)=>acc+=interest,0)
+  labelSumInterest.textContent = `${interest}€`
 };
 calcDisplaySummary(account1.movements)
-//FUNCTION FOR SHOWING THE TOTAL WITHDRAWALS
+
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
