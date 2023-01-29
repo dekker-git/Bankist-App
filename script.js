@@ -173,12 +173,15 @@ if(currentAccount?.pin === Number(inputLoginPin.value)){
 
 btnTransfer.addEventListener('click', function(e){
   e.preventDefault(); //stops page reload.
+
   //pulling amount value from input field.
   const amount = Number(inputTransferAmount.value);
+
   //pulling user to send money to from input field
   const receiverAcc = accounts.find(acc => acc.username === inputTransferTo.value);
   //
   console.log(amount,receiverAcc);
+
   // setting conditions for money transfers. must have enough money to send, and the amount to send must be positive.
   //recipient username cannot match your own username.
   //recipient must exist.
@@ -191,11 +194,13 @@ btnTransfer.addEventListener('click', function(e){
 
   if (amount > 0 && receiverAcc && currentAccount.balance >= amount && receiverAcc?.username !== currentAccount.username){
     console.log('transfer valid')
+
     //add to each users movement array
     //for sender, add the negative amount
     //for receiver, add the positive amount.
     currentAccount.movements.push(amount * -1);
     receiverAcc.movements.push(amount);
+
      ///-----updating UI again------
       // display movements.
     displayMovements(currentAccount.movements);
@@ -210,20 +215,52 @@ btnTransfer.addEventListener('click', function(e){
   }
 });
 
+////----------request a loan ----------------////
+///conditions: bank will only give loan if there's been a deposit worth 10% of the loan amount.
+
+btnLoan.addEventListener('click',function(e){
+  e.preventDefault(); //prevent page reload on form entry
+  const loanAmount = Number(inputLoanAmount.value);
+
+  if (loanAmount > 0 && currentAccount.movements.some(mov => mov >= (loanAmount*0.10))) {
+    console.log('we qualify');
+    currentAccount.movements.push(loanAmount);
+    ///-----updating UI again------
+      // display movements.
+      displayMovements(currentAccount.movements);
+      // display balance.
+      calcDisplayBalance(currentAccount.movements);
+      //display summary.
+      calcDisplaySummary(currentAccount.movements);
+      //////
+  } else {
+    alert('You do not meet the requirements for this loan.')
+  }
+  inputLoanAmount.value = '';
+})
+
+
+
 /////----------close account feature-----------/////
 btnClose.addEventListener('click',function(e) {
   e.preventDefault(); //prevent page reload on form entry
+
   //if username inputted matches the current user's username
   //and the pin matches the current user's pin
   if (inputCloseUsername.value === currentAccount.username && Number(inputClosePin.value) === (currentAccount.pin)){
+
     //searching for the index of the username trying to be deleted. looks for the first element in the array that matches the condition.
     const index = accounts.findIndex(acc => acc.username === currentAccount.username);
+
     //now we splice to remove the account at the found index.
     accounts.splice(index, 1);
+
     //now the user should be logged out if the account deletion was successful.
     containerApp.style.opacity = 0;
   }
   else {
     alert('Incorrect username or pin!')
   }
+  console.log(accounts);
 })
+
