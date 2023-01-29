@@ -128,6 +128,36 @@ const calcDisplaySummary = function(movements) {
 calcDisplaySummary(account1.movements)
 
 
+//hitting enter on form elements in html triggers a click event.
 //-----EVENT HANDLERS (for logging in)-------
+let currentAccount;
 
+btnLogin.addEventListener('click',function(event){
+  //prevents form from submitting
+  event.preventDefault();
+  console.log('Login');
+
+currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
+
+console.log(currentAccount);
+
+//optional chaining.. current pin will only be read if the account exists.
+
+if(currentAccount?.pin === Number(inputLoginPin.value)){
+
+  // display UI and welcome message
+  //---welcome message with only first name---
+  labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
+  
+  //---showing the UI [changing opacity on .app]
+  containerApp.style.opacity = 1;
+
+  // display movements.
+  
+
+  // display balance.
+
+  //display summary.
+}
+})
 
