@@ -61,6 +61,18 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+///CREATING THE USERNAMES FOR EACH INDIVIDUAL USER.
+const createUsernames = function (accs) {
+  accs.forEach(function(acc) {
+     acc.username = acc.owner
+     .toLowerCase()
+     .split(' ')
+     .map(name => name[0])
+     .join('');
+  })
+};
+createUsernames(accounts);
+console.log(accounts);
 
 ////FUNCTION FOR DISPLAYING THE MOVEMENTS (DEPOSITS/WITHDRAWALS) IN THE BANKIST APP INTERFACE... displayMovements()
 const displayMovements = function(movements) {
@@ -114,5 +126,8 @@ const calcDisplaySummary = function(movements) {
   labelSumInterest.textContent = `${interest}€`
 };
 calcDisplaySummary(account1.movements)
+
+
+//-----EVENT HANDLERS (for logging in)-------
 
 
