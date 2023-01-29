@@ -77,11 +77,15 @@ createUsernames(accounts);
 console.log(accounts);
 
 ////FUNCTION FOR DISPLAYING THE MOVEMENTS (DEPOSITS/WITHDRAWALS) IN THE BANKIST APP INTERFACE... displayMovements()
-const displayMovements = function(movements) {
+const displayMovements = function(movements, sort=false) {
 
 containerMovements.innerHTML= '';
 
-  movements.forEach(function(mov, i){
+//sorting the transaction history
+const movs = sort ? movements.slice().sort((a,b) => a - b) : movements;
+
+
+  movs.forEach(function(mov, i){
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = ` 
@@ -264,3 +268,8 @@ btnClose.addEventListener('click',function(e) {
   console.log(accounts);
 })
 
+//------- sorting button eventhandler-------
+btnSort.addEventListener('click',function(e){
+  e.preventDefault();
+  displayMovements(currentAccount.movements, true);
+})
