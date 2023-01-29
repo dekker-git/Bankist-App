@@ -117,7 +117,7 @@ const calcDisplaySummary = function(movements) {
   //interest only applies on deposits > 1 euro
   const interest = movements
   .filter(mov => mov > 0)
-  .map(deposit => deposit*0.012)
+  .map(deposit => deposit*(currentAccount.interestRate/100))
   .filter((int, i, array) => {
     return int >= 1;})
   .reduce((acc,interest)=>acc+=interest,0)
@@ -149,6 +149,11 @@ if(currentAccount?.pin === Number(inputLoginPin.value)){
   
   //---showing the UI [changing opacity on .app]
   containerApp.style.opacity = 1;
+
+  //clear the input fields and taking them out of focus.
+  inputLoginUsername.value = inputLoginPin.value = ''
+  inputLoginPin.blur();
+
 
   // display movements.
   displayMovements(currentAccount.movements);
