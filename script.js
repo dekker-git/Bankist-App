@@ -91,7 +91,6 @@ containerMovements.innerHTML= '';
   containerMovements.insertAdjacentHTML('afterbegin',html);
   })
 };
-displayMovements(account1.movements);
 
 //FUNCTION FOR PRINTING THE TOTAL BALANCE AFTER ACCOUNTING FOR ALL THE DEPOSITS AND WITHDRAWALS.
 const calcDisplayBalance = function(movements){
@@ -99,7 +98,6 @@ const calcDisplayBalance = function(movements){
 
   labelBalance.textContent = `${balance}€`;
 };
-calcDisplayBalance(account1.movements);
 
 //FUNCION FOR SHOWING THE TOTAL DEPOSITS,WITHDRAWALS AND INTEREST.. 'DisplaySummary'
 //summing all deposits
@@ -125,7 +123,6 @@ const calcDisplaySummary = function(movements) {
   .reduce((acc,interest)=>acc+=interest,0)
   labelSumInterest.textContent = `${interest}€`
 };
-calcDisplaySummary(account1.movements)
 
 
 //hitting enter on form elements in html triggers a click event.
@@ -153,11 +150,13 @@ if(currentAccount?.pin === Number(inputLoginPin.value)){
   containerApp.style.opacity = 1;
 
   // display movements.
+  displayMovements(currentAccount.movements);
   
-
   // display balance.
-
+  calcDisplayBalance(currentAccount.movements);
+  
   //display summary.
+  calcDisplaySummary(currentAccount.movements)
 }
 })
 
