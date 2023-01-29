@@ -62,7 +62,7 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 
-
+////FUNCTION FOR DISPLAYING THE MOVEMENTS (DEPOSITS/WITHDRAWALS) IN THE BANKIST APP INTERFACE... displayMovements()
 const displayMovements = function(movements) {
 
 containerMovements.innerHTML= '';
@@ -81,6 +81,13 @@ containerMovements.innerHTML= '';
 };
 displayMovements(account1.movements);
 
+//FUNCTION FOR PRINTING THE TOTAL BALANCE AFTER ACCOUNTING FOR ALL THE DEPOSITS AND WITHDRAWALS.
+const calcDisplayBalance = function(movements){
+  const balance = movements.reduce((acc,mov)=> acc + mov,0);
+
+  labelBalance.textContent = `$${balance} CAD`;
+};
+calcDisplayBalance(account1.movements);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
