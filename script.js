@@ -121,7 +121,8 @@ const calcDisplaySummary = function(movements) {
   .filter((int, i, array) => {
     return int >= 1;})
   .reduce((acc,interest)=>acc+=interest,0)
-  labelSumInterest.textContent = `${interest}€`
+  //added .toFixed() to ensure not too many decimals are showing
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`
 };
 
 
