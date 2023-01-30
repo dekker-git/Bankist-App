@@ -89,6 +89,37 @@ const account1 = {
    return `${day}/${month}/${year}`;
     };
 
+
+    //starting our logout timer
+    const startLogOutTimer = function() {
+      const tick = () => {
+        const min = String(Math.trunc(timer / 60)).padStart(2,0);
+        const sec = String(timer % 60).padStart(2,0);
+        // in each call, print the remaining time to the userinterface.
+        labelTimer.textContent = `${min}:${sec}`;
+        
+
+        //when the time is at 0, stop the timer and log the user out.
+        if (timer===0){
+          clearInterval(countdown);
+          labelWelcome.textContent = 'Log in to get started';
+          containerApp.style.opacity = 0;
+        }
+
+        //decrease by 1s 
+        timer--;
+
+      };
+      // set time to 5 minutes
+      let timer = 40;
+      tick();
+      // call the timer every second
+      const countdown = setInterval(tick, 1000)
+      return countdown;
+    };
+
+
+
   ////////////////////
   //account movements
   //////////////////
@@ -171,7 +202,7 @@ const account1 = {
   // Event handlers
   ///--------------------------------------------------//
   ///------------------LOGGING IN------------------------//
-  let currentAccount;
+  let currentAccount, countdown;
   
   btnLogin.addEventListener('click', function (e) {
     // Prevent form from submitting
@@ -204,6 +235,10 @@ const account1 = {
       // Clear input fields
       inputLoginUsername.value = inputLoginPin.value = '';
       inputLoginPin.blur();
+
+      //logout timer
+      if (countdown) clearInterval(countdown);
+      countdown = startLogOutTimer();
 
       // Update UI
       updateUI(currentAccount);
@@ -294,13 +329,6 @@ const account1 = {
 
 
 
-  ///fake being loggen in to work on account.
-  // currentAccount = account1;
-  // updateUI(currentAccount);
-  // containerApp.style.opacity=100;
 
 
- //date calculations.
- const future = new Date(2037,10,19,15,23);
- console.log(+future);
 
