@@ -8,7 +8,7 @@
 // DIFFERENT DATA! Contains movement dates, currency and locale
 
 const account1 = {
-    owner: 'Jonas Schmedtmann',
+    owner: 'Danny Dekker',
     movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
     interestRate: 1.2, // %
     pin: 1111,
@@ -164,6 +164,8 @@ const account1 = {
   
   ///////////////////////////////////////
   // Event handlers
+  ///--------------------------------------------------//
+  ///------------------LOGGING IN------------------------//
   let currentAccount;
   
   btnLogin.addEventListener('click', function (e) {
@@ -182,14 +184,28 @@ const account1 = {
       }`;
       containerApp.style.opacity = 100;
   
+      
+      //Implementing current date
+      const now = new Date();
+      const day = `${now.getDate()}`.padStart(2, 0);
+      const month = `${now.getMonth() + 1}`.padStart(2, 0);
+      //0-based for months
+      const year = now.getFullYear();
+      const hour = `${now.getHours()}`.padStart(2,0);
+      const minutes = `${now.getMinutes()}`.padStart(2,0);
+      labelDate.textContent = `${day}/${month}/${year}, ${hour}:${minutes}`;
+      // we want month/day/year
+      
       // Clear input fields
       inputLoginUsername.value = inputLoginPin.value = '';
       inputLoginPin.blur();
-  
+
       // Update UI
       updateUI(currentAccount);
     }
   });
+  ///--------------------------------------------------//
+  //-------------------MONEY TRANSFERS--------------------//
   
   btnTransfer.addEventListener('click', function (e) {
     e.preventDefault();
@@ -208,27 +224,39 @@ const account1 = {
       // Doing the transfer
       currentAccount.movements.push(-amount);
       receiverAcc.movements.push(amount);
+
+      //Add transfer date
+      currentAccount.movementsDates.push(new Date().toISOString());
+      receiverAcc.movementsDates.push(new Date().toISOString());
+
   
       // Update UI
       updateUI(currentAccount);
     }
   });
-  
+  ///--------------------------------------------------//
+  ///-------------------LOANS--------------------------//
+
   btnLoan.addEventListener('click', function (e) {
     e.preventDefault();
   
     const amount = Number(inputLoanAmount.value);
   
     if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-      // Add movement
+      // Add Loan movement
       currentAccount.movements.push(amount);
+
+      //Add Loan date
+      currentAccount.movementsDates.push(new Date().toISOString());
   
       // Update UI
       updateUI(currentAccount);
     }
     inputLoanAmount.value = '';
   });
-  
+    ///--------------------------------------------------//
+  //---------------ACCOUNT CLOSURES------------------------//
+
   btnClose.addEventListener('click', function (e) {
     e.preventDefault();
   
@@ -261,19 +289,10 @@ const account1 = {
 
 
 
-  ///fake being loggen in to work on account.
-  currentAccount = account1;
-  updateUI(currentAccount);
-  containerApp.style.opacity=100;
+//   ///fake being loggen in to work on account.
+//   currentAccount = account1;
+//   updateUI(currentAccount);
+//   containerApp.style.opacity=100;
 
 
-  //Implementing current date
-const now = new Date();
-const day = `${now.getDate()}`.padStart(2, 0);
-const month = `${now.getMonth() + 1}`.padStart(2, 0);
- //0-based for months
-const year = now.getFullYear();
-const hour = now.getHours();
-const minutes = now.getMinutes();
-labelDate.textContent = `${day}/${month}/${year}, ${hour}:${minutes}`;
-// we want month/day/year
+ 
