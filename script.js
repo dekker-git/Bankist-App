@@ -111,7 +111,7 @@ const account1 = {
 
       };
       // set time to 5 minutes
-      let timer = 40;
+      let timer = 300;
       tick();
       // call the timer every second
       const countdown = setInterval(tick, 1000)
