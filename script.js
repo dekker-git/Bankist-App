@@ -80,8 +80,6 @@ const account1 = {
    Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
 
    const daysPassed = calcDaysPassed((new Date(), date));
-   console.log(daysPassed);
-
    const day = `${date.getDate()}`.padStart(2, 0);
    const month = `${date.getMonth() + 1}`.padStart(2, 0);
    //0-based for months
@@ -239,7 +237,6 @@ const account1 = {
       //logout timer
       if (countdown) clearInterval(countdown);
       countdown = startLogOutTimer();
-
       // Update UI
       updateUI(currentAccount);
     }
@@ -272,6 +269,10 @@ const account1 = {
   
       // Update UI
       updateUI(currentAccount);
+
+      //Reset inactivity timer
+      clearInterval(countdown);
+      countdown = startLogOutTimer();
     }
   });
   ///--------------------------------------------------//
@@ -291,6 +292,10 @@ const account1 = {
   
       // Update UI
       updateUI(currentAccount);},2500);
+
+       //Reset inactivity timer
+       clearInterval(countdown);
+       countdown = startLogOutTimer();
     }
     inputLoanAmount.value = '';
   });
